@@ -1,0 +1,106 @@
+@model Opportunity
+@{
+    ViewData["Title"] = $"Opportunity - {Model.OpportunityName}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <div class="d-flex align-items-center gap-2">
+            <h3 class="fw-bold mb-0">@Model.OpportunityName</h3>
+            <span class="badge badge-stage-@(Model.Stage.ToLower())">@Model.Stage</span>
+            <span class="badge @(Model.Status == "Won" ? "bg-success" : Model.Status == "Lost" ? "bg-danger" : "bg-primary")">@Model.Status</span>
+        </div>
+        <p class="text-muted small mb-0">Customer: <a asp-controller="Customers" asp-action="Details" asp-route-id="@Model.CustomerId" class="fw-semibold">@(Model.Customer?.CustomerName ?? "Customer #" + Model.CustomerId)</a></p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.OpportunityId" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-pencil me-1"></i> Edit Opportunity
+        </a>
+        <a asp-controller="FollowUps" asp-action="Create" asp-route-customerId="@Model.CustomerId" class="btn btn-outline-warning btn-sm">
+            <i class="bi bi-calendar-plus me-1"></i> Schedule Follow-Up
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Pipeline
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="card p-3 text-center">
+            <div class="small text-muted text-uppercase fw-semibold">Deal Amount</div>
+            <h3 class="fw-bold text-dark mb-0">@Model.Amount.ToString("C0")</h3>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card p-3 text-center">
+            <div class="small text-muted text-uppercase fw-semibold">Win Probability</div>
+            <h3 class="fw-bold text-primary mb-0">@Model.Probability%</h3>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card p-3 text-center">
+            <div class="small text-muted text-uppercase fw-semibold">Weighted Pipeline</div>
+            <h3 class="fw-bold text-success mb-0">@Model.WeightedAmount.ToString("C0")</h3>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card p-3 text-center">
+            <div class="small text-muted text-uppercase fw-semibold">Expected Close Date</div>
+            <h4 class="fw-bold text-secondary mb-0">@Model.ExpectedCloseDate.ToString("yyyy-MM-dd")</h4>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-info-circle me-1 text-primary"></i> Deal Overview & Owner</h6>
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-muted">Customer Account</dt>
+                <dd class="col-sm-8 fw-semibold">@(Model.Customer?.CustomerName ?? "-")</dd>
+
+                <dt class="col-sm-4 text-muted">Account Owner</dt>
+                <dd class="col-sm-8">@(Model.AssignedUser?.FullName ?? "Unassigned")</dd>
+
+                <dt class="col-sm-4 text-muted">Created Date</dt>
+                <dd class="col-sm-8">@Model.CreatedDate.ToString("MMMM dd, yyyy")</dd>
+
+                @if (Model.Lead != null)
+                {
+                    <dt class="col-sm-4 text-muted">Converted From Lead</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Leads" asp-action="Details" asp-route-id="@Model.LeadId">
+                            @Model.Lead.LeadName (@Model.Lead.LeadCode)
+                        </a>
+                    </dd>
+                }
+
+                <dt class="col-sm-4 text-muted">Notes</dt>
+                <dd class="col-sm-8 text-muted">@(Model.Notes ?? "No additional notes logged.")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card p-3">
+            <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-diagram-2 me-1 text-info"></i> Pipeline Progress</h6>
+            <ul class="list-group list-group-flush small">
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <span>1. Qualification</span>
+                    <span class="badge @(Model.Stage == "Qualification" ? "bg-primary" : "bg-light text-dark")">@(Model.Stage == "Qualification" ? "Current" : "Done")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <span>2. Proposal</span>
+                    <span class="badge @(Model.Stage == "Proposal" ? "bg-primary" : "bg-light text-dark")">@(Model.Stage == "Proposal" ? "Current" : "")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <span>3. Negotiation</span>
+                    <span class="badge @(Model.Stage == "Negotiation" ? "bg-primary" : "bg-light text-dark")">@(Model.Stage == "Negotiation" ? "Current" : "")</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <span>4. Final Outcome</span>
+                    <span class="badge @(Model.Stage == "Won" ? "bg-success" : Model.Stage == "Lost" ? "bg-danger" : "bg-light text-dark")">@(Model.Stage == "Won" ? "Won" : Model.Stage == "Lost" ? "Lost" : "Pending")</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

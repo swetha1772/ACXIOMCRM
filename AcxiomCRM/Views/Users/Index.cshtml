@@ -1,0 +1,105 @@
+@model UserListViewModel
+@{
+    ViewData["Title"] = "User & Role Administration";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold mb-0">User & Role Administration</h3>
+        <p class="text-muted small mb-0">Manage system credentials, role-based access scopes and account security</p>
+    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-person-plus me-1"></i> Create User
+        </a>
+    }
+</div>
+
+<!-- Filters -->
+<div class="card p-3 mb-4">
+    <form method="get" asp-action="Index" class="row g-2 align-items-center">
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search by name or email..." />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select name="roleFilter" class="form-select">
+                <option value="">All Roles</option>
+                <option value="Admin" selected="@(Model.RoleFilter == "Admin")">Admin</option>
+                <option value="Manager" selected="@(Model.RoleFilter == "Manager")">Manager</option>
+                <option value="SalesExecutive" selected="@(Model.RoleFilter == "SalesExecutive")">Sales Executive</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-secondary px-3 w-100">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-secondary px-3">Reset</a>
+        </div>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Email Address</th>
+                    <th>Assigned Role</th>
+                    <th>Active</th>
+                    <th>Lockout Status</th>
+                    <th>Failed Attempts</th>
+                    <th>Created</th>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <th class="text-end">Actions</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model.Users)
+                {
+                    <tr>
+                        <td class="fw-bold">@u.FullName</td>
+                        <td>@u.Email</td>
+                        <td>
+                            <span class="role-badge @(u.Role == "Admin" ? "role-admin" : u.Role == "Manager" ? "role-manager" : "role-sales")">
+                                @u.Role
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge @(u.IsActive ? "bg-success" : "bg-danger")">
+                                @(u.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </td>
+                        <td>
+                            @if (u.IsLockedOut)
+                            {
+                                <span class="badge bg-danger"><i class="bi bi-lock-fill me-1"></i> Locked</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark border">Normal</span>
+                            }
+                        </td>
+                        <td class="small @(u.AccessFailedCount > 0 ? "text-danger fw-bold" : "text-muted")">
+                            @u.AccessFailedCount
+                        </td>
+                        <td class="small text-muted">@u.CreatedDate.ToString("yyyy-MM-dd")</td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <td class="text-end">
+                                <a asp-action="Edit" asp-route-id="@u.Id" class="btn btn-sm btn-outline-primary" title="Edit User">
+                                    <i class="bi bi-gear me-1"></i> Manage
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

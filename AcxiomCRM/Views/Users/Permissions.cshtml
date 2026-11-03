@@ -1,0 +1,97 @@
+@{
+    ViewData["Title"] = "Role-Based Permission Matrix";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold mb-0">Role & Permission Matrix</h3>
+        <p class="text-muted small mb-0">Section 7.1 Suggested Permission Matrix & Server-Side Security Scopes</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-primary btn-sm">
+        <i class="bi bi-people me-1"></i> Manage Users
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle mb-0 text-center">
+            <thead class="table-light">
+                <tr>
+                    <th class="text-start" style="width: 25%;">Module / Resource</th>
+                    <th style="width: 25%;"><span class="badge role-badge role-admin">Administrator</span></th>
+                    <th style="width: 25%;"><span class="badge role-badge role-manager">Manager</span></th>
+                    <th style="width: 25%;"><span class="badge role-badge role-sales">Sales Executive</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-speedometer2 text-primary me-2"></i> Dashboard</td>
+                    <td><span class="badge bg-success">Full Access</span></td>
+                    <td><span class="badge bg-primary">Team Scope</span></td>
+                    <td><span class="badge bg-info text-dark">Own / Assigned Scope</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-people text-primary me-2"></i> Customers</td>
+                    <td><span class="badge bg-success">Full CRUD</span></td>
+                    <td><span class="badge bg-primary">Team Scope CRUD</span></td>
+                    <td><span class="badge bg-info text-dark">Own / Assigned Scope</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-funnel text-primary me-2"></i> Leads</td>
+                    <td><span class="badge bg-success">Full CRUD</span></td>
+                    <td><span class="badge bg-primary">Team Scope CRUD</span></td>
+                    <td><span class="badge bg-info text-dark">Own / Assigned Scope</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-calendar-check text-primary me-2"></i> Follow-Ups</td>
+                    <td><span class="badge bg-success">Full CRUD</span></td>
+                    <td><span class="badge bg-primary">Team Scope CRUD</span></td>
+                    <td><span class="badge bg-info text-dark">Own / Assigned Scope</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-briefcase text-primary me-2"></i> Opportunities</td>
+                    <td><span class="badge bg-success">Full CRUD</span></td>
+                    <td><span class="badge bg-primary">Team Scope CRUD</span></td>
+                    <td><span class="badge bg-info text-dark">Own / Assigned Scope</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-person-badge text-primary me-2"></i> User Management</td>
+                    <td><span class="badge bg-success">Full Administration</span></td>
+                    <td><span class="badge bg-warning text-dark">View / Limited</span></td>
+                    <td><span class="badge bg-danger">No Access</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-shield-lock text-primary me-2"></i> Role Management</td>
+                    <td><span class="badge bg-success">Full Administration</span></td>
+                    <td><span class="badge bg-danger">No Access</span></td>
+                    <td><span class="badge bg-danger">No Access</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-shield-check text-primary me-2"></i> Audit Logs</td>
+                    <td><span class="badge bg-success">Full View & Filter</span></td>
+                    <td><span class="badge bg-warning text-dark">Limited View</span></td>
+                    <td><span class="badge bg-danger">No Access</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-hdd-network text-primary me-2"></i> REST API</td>
+                    <td><span class="badge bg-success">Authorized Endpoints</span></td>
+                    <td><span class="badge bg-primary">Authorized Endpoints</span></td>
+                    <td><span class="badge bg-info text-dark">Authorized Endpoints</span></td>
+                </tr>
+                <tr>
+                    <td class="text-start fw-semibold"><i class="bi bi-bar-chart-line text-primary me-2"></i> Reports</td>
+                    <td><span class="badge bg-success">All Reports</span></td>
+                    <td><span class="badge bg-primary">Management / Team Reports</span></td>
+                    <td><span class="badge bg-info text-dark">Own / Assigned Reports</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card p-3 bg-light">
+    <h6 class="fw-bold text-dark mb-1"><i class="bi bi-info-circle me-1 text-primary"></i> Server-Side Enforcement</h6>
+    <p class="small text-muted mb-0">
+        In accordance with Section 7 of the specification, authorization is verified at the controller and query level, not merely by hiding navigation elements. Unauthorized access attempts trigger an immediate <code>403 Forbidden</code> response or safe redirection.
+    </p>
+</div>

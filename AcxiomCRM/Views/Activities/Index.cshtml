@@ -1,0 +1,168 @@
+@model ActivityListViewModel
+@{
+    ViewData["Title"] = "Activities";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold mb-0">Activity History & Touchpoints</h3>
+        <p class="text-muted small mb-0">Record and review customer calls, meetings, emails and tasks</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Log Activity
+    </a>
+</div>
+
+<!-- Filters -->
+<div class="card p-3 mb-4">
+    <form method="get" asp-action="Index" class="row g-2 align-items-center">
+        <div class="col-md-3">
+            <select name="typeFilter" class="form-select">
+                <option value="">All Activity Types</option>
+                <option value="Call" selected="@(Model.TypeFilter == "Call")">Call</option>
+                <option value="Meeting" selected="@(Model.TypeFilter == "Meeting")">Meeting</option>
+                <option value="Email" selected="@(Model.TypeFilter == "Email")">Email</option>
+                <option value="Task" selected="@(Model.TypeFilter == "Task")">Task</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="statusFilter" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="Scheduled" selected="@(Model.StatusFilter == "Scheduled")">Scheduled</option>
+                <option value="Completed" selected="@(Model.StatusFilter == "Completed")">Completed</option>
+                <option value="Cancelled" selected="@(Model.StatusFilter == "Cancelled")">Cancelled</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="date" name="dateFilter" value="@(Model.DateFilter?.ToString("yyyy-MM-dd"))" class="form-control" />
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-secondary px-3 w-100">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-secondary px-3">Reset</a>
+        </div>
+    </form>
+</div>
+
+<!-- Table -->
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Subject</th>
+                    <th>Related To</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Recorded By</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Activities.Any())
+                {
+                    @foreach (var a in Model.Activities)
+                    {
+                        <tr>
+                            <td>
+                                <span class="badge @(a.ActivityType == "Meeting" ? "bg-primary" : a.ActivityType == "Call" ? "bg-info text-dark" : a.ActivityType == "Email" ? "bg-secondary" : "bg-dark")">
+                                    @a.ActivityType
+                                </span>
+                            </td>
+                            <td class="fw-bold">@a.Subject</td>
+                            <td>
+                                @if (a.Customer != null)
+                                {
+                                    <a asp-controller="Customers" asp-action="Details" asp-route-id="@a.CustomerId" class="text-muted text-decoration-none">
+                                        <i class="bi bi-people me-1"></i> @a.Customer.CustomerName
+                                    </a>
+                                }
+                                else if (a.Lead != null)
+                                {
+                                    <a asp-controller="Leads" asp-action="Details" asp-route-id="@a.LeadId" class="text-muted text-decoration-none">
+                                        <i class="bi bi-funnel me-1"></i> @a.Lead.LeadName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td class="small text-muted">@a.ActivityDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>
+                                <span class="badge @(a.Status == "Completed" ? "bg-success" : a.Status == "Scheduled" ? "bg-warning text-dark" : "bg-secondary")">
+                                    @a.Status
+                                </span>
+                            </td>
+                            <td class="small">@(a.AssignedUser?.FullName ?? "Unassigned")</td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@a.ActivityId" class="btn btn-outline-info" title="Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@a.ActivityId" class="btn btn-outline-primary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteActModal-@a.ActivityId">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteActModal-@a.ActivityId" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content text-start">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete activity <strong>@a.Subject</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form asp-action="Delete" asp-route-id="@a.ActivityId" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-1"></i> No activities logged.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
+            <span class="small text-muted">Showing page @Model.PageNumber of @Model.TotalPages (Total @Model.TotalItems records)</span>
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)">Previous</a>
+                </li>
+                @for (int p = 1; p <= Model.TotalPages; p++)
+                {
+                    <li class="page-item @(p == Model.PageNumber ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                    </li>
+                }
+                <li class="page-item @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)">Next</a>
+                </li>
+            </ul>
+        </div>
+    }
+</div>

@@ -1,0 +1,202 @@
+@{
+    ViewData["Title"] = "REST API Documentation & Explorer";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold mb-0">REST API Specification & Live Explorer</h3>
+        <p class="text-muted small mb-0">Sections 10 & 17.14 REST API Architecture, DTO Contracts & Status Codes</p>
+    </div>
+</div>
+
+<!-- API Endpoints Overview -->
+<div class="card mb-4 shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-hdd-network text-primary me-2"></i> Documented Endpoints</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 small">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Purpose</th>
+                    <th>Access Scope</th>
+                    <th>Status Codes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge bg-primary">POST</span></td>
+                    <td><code>/api/auth/login</code></td>
+                    <td>Authenticate user & issue session</td>
+                    <td>Public / Rate limited</td>
+                    <td><code>200, 400, 401, 403</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-primary">POST</span></td>
+                    <td><code>/api/auth/logout</code></td>
+                    <td>Terminate authenticated session</td>
+                    <td>Authenticated</td>
+                    <td><code>200</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">GET</span></td>
+                    <td><code>/api/customers</code></td>
+                    <td>List/search customer accounts</td>
+                    <td>Authorized (Scoped)</td>
+                    <td><code>200, 401</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">GET</span></td>
+                    <td><code>/api/customers/{id}</code></td>
+                    <td>Retrieve single customer by ID</td>
+                    <td>Authorized (Scoped)</td>
+                    <td><code>200, 403, 404</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-primary">POST</span></td>
+                    <td><code>/api/customers</code></td>
+                    <td>Create customer record</td>
+                    <td>Authorized</td>
+                    <td><code>201, 400, 409</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-warning text-dark">PUT</span></td>
+                    <td><code>/api/customers/{id}</code></td>
+                    <td>Update customer record</td>
+                    <td>Authorized (Scoped)</td>
+                    <td><code>200, 400, 403, 404, 409</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-danger">DELETE</span></td>
+                    <td><code>/api/customers/{id}</code></td>
+                    <td>Delete / deactivate customer</td>
+                    <td>Authorized (Scoped)</td>
+                    <td><code>200, 403, 404</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">GET</span></td>
+                    <td><code>/api/leads</code></td>
+                    <td>List/search leads</td>
+                    <td>Authorized (Scoped)</td>
+                    <td><code>200, 401</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-primary">POST</span></td>
+                    <td><code>/api/leads</code></td>
+                    <td>Capture new lead</td>
+                    <td>Authorized</td>
+                    <td><code>201, 400</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">GET</span></td>
+                    <td><code>/api/opportunities</code></td>
+                    <td>List/search sales opportunities</td>
+                    <td>Authorized (Scoped)</td>
+                    <td><code>200, 401</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-primary">POST</span></td>
+                    <td><code>/api/opportunities</code></td>
+                    <td>Create sales opportunity</td>
+                    <td>Authorized</td>
+                    <td><code>201, 400</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">GET</span></td>
+                    <td><code>/api/followups</code></td>
+                    <td>List follow-ups</td>
+                    <td>Authorized (Scoped)</td>
+                    <td><code>200, 401</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-primary">POST</span></td>
+                    <td><code>/api/followups</code></td>
+                    <td>Create follow-up task</td>
+                    <td>Authorized</td>
+                    <td><code>201, 400</code></td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">GET</span></td>
+                    <td><code>/api/reports/pipeline</code></td>
+                    <td>Pipeline aggregate report</td>
+                    <td>Manager/Admin or scoped sales</td>
+                    <td><code>200, 401</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Live API Test Explorer -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-play-circle-fill text-success me-2"></i> Live API Explorer (Try It Out)</h6>
+        <span class="badge bg-success">Authenticated as @User.Identity?.Name</span>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <label class="form-label small fw-semibold">HTTP Method</label>
+                <select id="apiMethod" class="form-select form-select-sm">
+                    <option value="GET">GET</option>
+                </select>
+            </div>
+            <div class="col-md-7">
+                <label class="form-label small fw-semibold">Endpoint Route</label>
+                <select id="apiRoute" class="form-select form-select-sm font-monospace">
+                    <option value="/api/customers">/api/customers</option>
+                    <option value="/api/leads">/api/leads</option>
+                    <option value="/api/opportunities">/api/opportunities</option>
+                    <option value="/api/followups">/api/followups</option>
+                    <option value="/api/reports/pipeline">/api/reports/pipeline</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="button" id="btnSendRequest" class="btn btn-primary btn-sm w-100 fw-semibold">
+                    <i class="bi bi-send me-1"></i> Send Request
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small fw-semibold text-muted">Server Response:</span>
+                <span id="responseStatus" class="badge bg-secondary">Awaiting request</span>
+            </div>
+            <pre id="responseJson" class="p-3 bg-dark text-light rounded font-monospace small mb-0" style="max-height: 350px; overflow-y: auto;">
+Click 'Send Request' to test the endpoint live...
+            </pre>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('btnSendRequest').addEventListener('click', async function () {
+            const route = document.getElementById('apiRoute').value;
+            const statusBadge = document.getElementById('responseStatus');
+            const responseBox = document.getElementById('responseJson');
+
+            statusBadge.className = 'badge bg-warning text-dark';
+            statusBadge.textContent = 'Sending...';
+
+            try {
+                const response = await fetch(route);
+                const status = response.status;
+                const statusText = response.statusText;
+
+                statusBadge.className = status >= 200 && status < 300 ? 'badge bg-success' : 'badge bg-danger';
+                statusBadge.textContent = `HTTP ${status} ${statusText}`;
+
+                const data = await response.json();
+                responseBox.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                statusBadge.className = 'badge bg-danger';
+                statusBadge.textContent = 'Network / Request Error';
+                responseBox.textContent = err.toString();
+            }
+        });
+    </script>
+}

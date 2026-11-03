@@ -1,0 +1,12 @@
+**/.git
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/.appdata
+**/.dotnet_home
+**/.nuget
+**/.keys
+**/*.db
+**/*.db-shm
+**/*.db-wal

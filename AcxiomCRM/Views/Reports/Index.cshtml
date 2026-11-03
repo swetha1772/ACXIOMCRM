@@ -1,0 +1,175 @@
+@{
+    ViewData["Title"] = "Reports Center";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold mb-0">Reports & Analytics Center</h3>
+        <p class="text-muted small mb-0">Generate operational insights, sales pipeline audits and team conversion statistics</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+                <div class="p-3 bg-primary bg-opacity-10 text-primary rounded me-3">
+                    <i class="bi bi-people-fill fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">Customer Report</h5>
+                    <small class="text-muted">Master account distribution</small>
+                </div>
+            </div>
+            <p class="small text-muted flex-grow-1">
+                Account statuses, ownership allocations, contact channels and creation date timeline.
+            </p>
+            <a asp-action="CustomerReport" class="btn btn-outline-primary btn-sm w-100">
+                <i class="bi bi-file-earmark-text me-1"></i> Open Customer Report
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+                <div class="p-3 bg-info bg-opacity-10 text-info rounded me-3">
+                    <i class="bi bi-funnel-fill fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">Lead & Conversion</h5>
+                    <small class="text-muted">Acquisition metrics</small>
+                </div>
+            </div>
+            <p class="small text-muted flex-grow-1">
+                Lead sources, status progressions, qualification benchmarks and lead-to-customer conversion rate.
+            </p>
+            <a asp-action="LeadReport" class="btn btn-outline-info btn-sm w-100">
+                <i class="bi bi-file-earmark-text me-1"></i> Open Lead Report
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+                <div class="p-3 bg-success bg-opacity-10 text-success rounded me-3">
+                    <i class="bi bi-briefcase-fill fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">Opportunity Report</h5>
+                    <small class="text-muted">Deal values & milestones</small>
+                </div>
+            </div>
+            <p class="small text-muted flex-grow-1">
+                Detailed deal inventory by stage, expected close dates, probabilities and individual deal values.
+            </p>
+            <a asp-action="OpportunityReport" class="btn btn-outline-success btn-sm w-100">
+                <i class="bi bi-file-earmark-text me-1"></i> Open Opportunity Report
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+                <div class="p-3 bg-warning bg-opacity-10 text-warning rounded me-3">
+                    <i class="bi bi-calendar-check-fill fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">Follow-Up Report</h5>
+                    <small class="text-muted">Touchpoint execution</small>
+                </div>
+            </div>
+            <p class="small text-muted flex-grow-1">
+                Planned vs completed follow-ups, overdue client activities and communication compliance.
+            </p>
+            <a asp-action="FollowUpReport" class="btn btn-outline-warning btn-sm w-100">
+                <i class="bi bi-file-earmark-text me-1"></i> Open Follow-Up Report
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+                <div class="p-3 bg-danger bg-opacity-10 text-danger rounded me-3">
+                    <i class="bi bi-graph-up-arrow fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">Pipeline Report</h5>
+                    <small class="text-muted">Weighted revenue forecast</small>
+                </div>
+            </div>
+            <p class="small text-muted flex-grow-1">
+                Stage-wise breakdown and executive-wise pipeline allocation with weighted probability models.
+            </p>
+            <a asp-action="PipelineReport" class="btn btn-outline-danger btn-sm w-100">
+                <i class="bi bi-file-earmark-text me-1"></i> Open Pipeline Report
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 p-4 border-0 shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+                <div class="p-3 bg-teal bg-opacity-10 text-success rounded me-3">
+                    <i class="bi bi-pie-chart-fill fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">Sales & Conversion</h5>
+                    <small class="text-muted">Win/Loss & deal velocity</small>
+                </div>
+            </div>
+            <p class="small text-muted flex-grow-1">
+                Win/loss ratios, lead-to-opportunity conversions, average deal size and won revenue totals.
+            </p>
+            <a asp-action="SalesConversionReport" class="btn btn-outline-success btn-sm w-100">
+                <i class="bi bi-file-earmark-text me-1"></i> Open Sales & Conversion
+            </a>
+        </div>
+    </div>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 p-4 border-0 shadow-sm">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-secondary bg-opacity-10 text-secondary rounded me-3">
+                        <i class="bi bi-person-lines-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">User Activity Report</h5>
+                        <small class="text-muted">Staff performance & audit</small>
+                    </div>
+                </div>
+                <p class="small text-muted flex-grow-1">
+                    System action counts per user, login counts, creation/update throughput and completed tasks.
+                </p>
+                <a asp-action="UserActivityReport" class="btn btn-outline-secondary btn-sm w-100">
+                    <i class="bi bi-file-earmark-text me-1"></i> Open User Activity Report
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 p-4 border-0 shadow-sm">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="p-3 bg-dark bg-opacity-10 text-dark rounded me-3">
+                        <i class="bi bi-shield-check fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Compliance Audit Report</h5>
+                        <small class="text-muted">Security and access logs</small>
+                    </div>
+                </div>
+                <p class="small text-muted flex-grow-1">
+                    Security events, password and role modifications, failed logins and system access audits.
+                </p>
+                <a asp-action="AuditReport" class="btn btn-outline-dark btn-sm w-100">
+                    <i class="bi bi-file-earmark-text me-1"></i> Open Audit Report
+                </a>
+            </div>
+        </div>
+    }
+</div>

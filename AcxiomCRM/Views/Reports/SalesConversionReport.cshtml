@@ -1,0 +1,133 @@
+@model SalesConversionReportViewModel
+@{
+    ViewData["Title"] = "Sales & Conversion Metrics";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold mb-0">Sales & Conversion Performance Report</h3>
+        <p class="text-muted small mb-0">Comprehensive analysis of lead conversion velocity, win/loss ratios and deal sizes</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button onclick="window.print()" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-printer me-1"></i> Print / Export
+        </button>
+        <a asp-action="Index" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Reports Home
+        </a>
+    </div>
+</div>
+
+<!-- Conversion Metrics -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card p-3 bg-white text-center">
+            <div class="text-muted small text-uppercase fw-semibold">Lead Conversion Rate</div>
+            <h3 class="fw-bold text-primary mb-0">@Model.LeadConversionRate%</h3>
+            <div class="small text-muted">@Model.ConvertedLeads of @Model.TotalLeads Converted</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card p-3 bg-white text-center">
+            <div class="text-muted small text-uppercase fw-semibold">Opportunity Win Rate</div>
+            <h3 class="fw-bold text-success mb-0">@Model.WinRate%</h3>
+            <div class="small text-muted">@Model.WonDeals Won vs @Model.LostDeals Lost</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card p-3 bg-white text-center">
+            <div class="text-muted small text-uppercase fw-semibold">Total Won Revenue</div>
+            <h3 class="fw-bold text-success mb-0">@Model.TotalWonRevenue.ToString("C0")</h3>
+            <div class="small text-muted">@Model.TotalLostRevenue.ToString("C0") Lost</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card p-3 bg-white text-center">
+            <div class="text-muted small text-uppercase fw-semibold">Average Won Deal Size</div>
+            <h3 class="fw-bold text-dark mb-0">@Model.AverageDealSize.ToString("C0")</h3>
+            <div class="small text-muted">Across won contracts</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card p-3 h-100">
+            <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-check-circle-fill me-1 text-success"></i> Successfully Converted Leads</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Lead Name</th>
+                            <th>Company</th>
+                            <th>Expected Value</th>
+                            <th>Converted Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ConvertedLeadsList.Any())
+                        {
+                            @foreach (var l in Model.ConvertedLeadsList)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">
+                                        <a asp-controller="Leads" asp-action="Details" asp-route-id="@l.LeadId">@l.LeadName</a>
+                                    </td>
+                                    <td>@(l.CompanyName ?? "-")</td>
+                                    <td class="fw-bold text-success">@l.ExpectedValue.ToString("C0")</td>
+                                    <td class="small text-muted">@l.CreatedDate.ToString("yyyy-MM-dd")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4" class="text-center text-muted py-3">No converted leads recorded yet.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card p-3 h-100">
+            <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-trophy-fill me-1 text-warning"></i> Closed Deals (Won & Lost)</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Opportunity</th>
+                            <th>Amount</th>
+                            <th>Outcome</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.ClosedOpportunitiesList.Any())
+                        {
+                            @foreach (var o in Model.ClosedOpportunitiesList)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">
+                                        <a asp-controller="Opportunities" asp-action="Details" asp-route-id="@o.OpportunityId">@o.OpportunityName</a>
+                                    </td>
+                                    <td class="fw-bold">@o.Amount.ToString("C0")</td>
+                                    <td>
+                                        <span class="badge @(o.Stage == "Won" ? "bg-success" : "bg-danger")">
+                                            @o.Stage
+                                        </span>
+                                    </td>
+                                    <td class="small">@(o.AssignedUser?.FullName ?? "-")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4" class="text-center text-muted py-3">No closed opportunities yet.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

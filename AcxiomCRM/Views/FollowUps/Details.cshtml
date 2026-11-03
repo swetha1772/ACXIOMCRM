@@ -1,0 +1,80 @@
+@model FollowUp
+@{
+    ViewData["Title"] = $"Follow-Up - {Model.Subject}";
+    var isOverdue = Model.Status == "Planned" && Model.FollowUpDate.Date < DateTime.Today;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <div class="d-flex align-items-center gap-2">
+            <h3 class="fw-bold mb-0">@Model.Subject</h3>
+            <span class="badge @(Model.Status == "Planned" ? "bg-warning text-dark" : Model.Status == "Completed" ? "bg-success" : "bg-secondary")">@Model.Status</span>
+            @if (isOverdue)
+            {
+                <span class="badge bg-danger">Overdue</span>
+            }
+        </div>
+        <p class="text-muted small mb-0">Scheduled for @Model.FollowUpDate.ToString("MMMM dd, yyyy")</p>
+    </div>
+    <div class="d-flex gap-2">
+        @if (Model.Status == "Planned")
+        {
+            <form asp-action="Complete" asp-route-id="@Model.FollowUpId" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success btn-sm">
+                    <i class="bi bi-check-lg me-1"></i> Mark as Completed
+                </button>
+            </form>
+        }
+        <a asp-action="Edit" asp-route-id="@Model.FollowUpId" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-pencil me-1"></i> Reschedule / Edit
+        </a>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h6 class="fw-bold text-dark border-bottom pb-2 mb-3"><i class="bi bi-info-circle me-1 text-primary"></i> Task Overview</h6>
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-muted">Follow-Up Type</dt>
+                <dd class="col-sm-8"><span class="badge bg-light text-dark border">@Model.FollowUpType</span></dd>
+
+                <dt class="col-sm-4 text-muted">Follow-Up Date</dt>
+                <dd class="col-sm-8 fw-semibold @(isOverdue ? "text-danger" : "")">@Model.FollowUpDate.ToString("yyyy-MM-dd")</dd>
+
+                <dt class="col-sm-4 text-muted">Assigned User</dt>
+                <dd class="col-sm-8">@(Model.AssignedUser?.FullName ?? "Unassigned")</dd>
+
+                @if (Model.Customer != null)
+                {
+                    <dt class="col-sm-4 text-muted">Related Customer</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Customers" asp-action="Details" asp-route-id="@Model.CustomerId">
+                            @Model.Customer.CustomerName (@Model.Customer.CustomerCode)
+                        </a>
+                    </dd>
+                }
+
+                @if (Model.Lead != null)
+                {
+                    <dt class="col-sm-4 text-muted">Related Lead</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Leads" asp-action="Details" asp-route-id="@Model.LeadId">
+                            @Model.Lead.LeadName (@Model.Lead.LeadCode)
+                        </a>
+                    </dd>
+                }
+
+                <dt class="col-sm-4 text-muted">Remarks</dt>
+                <dd class="col-sm-8 text-muted">@(Model.Remarks ?? "No remarks entered.")</dd>
+
+                <dt class="col-sm-4 text-muted">Created Timestamp</dt>
+                <dd class="col-sm-8 small text-secondary">@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss") UTC</dd>
+            </dl>
+        </div>
+    </div>
+</div>

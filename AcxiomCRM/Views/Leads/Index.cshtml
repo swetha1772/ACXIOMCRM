@@ -1,0 +1,168 @@
+@model LeadListViewModel
+@{
+    ViewData["Title"] = "Lead Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h3 class="fw-bold mb-0">Lead Capture & Qualification</h3>
+        <p class="text-muted small mb-0">Track prospect lifecycles, qualifications and conversion pipelines</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> New Lead
+    </a>
+</div>
+
+<!-- Filters -->
+<div class="card p-3 mb-4">
+    <form method="get" asp-action="Index" class="row g-2 align-items-center">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-search"></i></span>
+                <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search lead name, company, email..." />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <select name="statusFilter" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="New" selected="@(Model.StatusFilter == "New")">New</option>
+                <option value="Contacted" selected="@(Model.StatusFilter == "Contacted")">Contacted</option>
+                <option value="Qualified" selected="@(Model.StatusFilter == "Qualified")">Qualified</option>
+                <option value="Unqualified" selected="@(Model.StatusFilter == "Unqualified")">Unqualified</option>
+                <option value="Converted" selected="@(Model.StatusFilter == "Converted")">Converted</option>
+                <option value="Lost" selected="@(Model.StatusFilter == "Lost")">Lost</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="assignedUserFilter" asp-items="Model.UsersList" class="form-select">
+                <option value="">All Assigned Executives</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-secondary px-3 w-100">Filter</button>
+            <a asp-action="Index" class="btn btn-outline-secondary px-3">Reset</a>
+        </div>
+    </form>
+</div>
+
+<!-- Leads Table -->
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Lead Name</th>
+                    <th>Company</th>
+                    <th>Source</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Exp. Value</th>
+                    <th>Assigned To</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Leads.Any())
+                {
+                    @foreach (var l in Model.Leads)
+                    {
+                        <tr>
+                            <td><span class="badge bg-light text-dark border">@l.LeadCode</span></td>
+                            <td class="fw-bold">
+                                <a asp-action="Details" asp-route-id="@l.LeadId" class="text-decoration-none">
+                                    @l.LeadName
+                                </a>
+                            </td>
+                            <td>@(l.CompanyName ?? "-")</td>
+                            <td><span class="badge bg-light text-dark border">@l.Source</span></td>
+                            <td>
+                                <span class="badge badge-status badge-status-@(l.Status.ToLower())">
+                                    @l.Status
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge @(l.Priority == "High" ? "bg-danger" : l.Priority == "Medium" ? "bg-warning text-dark" : "bg-secondary")">
+                                    @l.Priority
+                                </span>
+                            </td>
+                            <td class="fw-semibold">@l.ExpectedValue.ToString("C0")</td>
+                            <td class="small">@(l.AssignedUser?.FullName ?? "Unassigned")</td>
+                            <td class="text-end">
+                                <div class="btn-group btn-group-sm">
+                                    @if (l.Status != "Converted")
+                                    {
+                                        <a asp-action="Convert" asp-route-id="@l.LeadId" class="btn btn-outline-success" title="Convert to Customer & Opportunity">
+                                            <i class="bi bi-arrow-repeat"></i> Convert
+                                        </a>
+                                    }
+                                    <a asp-action="Details" asp-route-id="@l.LeadId" class="btn btn-outline-info" title="Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@l.LeadId" class="btn btn-outline-primary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteLeadModal-@l.LeadId">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteLeadModal-@l.LeadId" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content text-start">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete lead <strong>@l.LeadName</strong> (@l.LeadCode)?
+                                                This action is recorded in the audit log.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form asp-action="Delete" asp-route-id="@l.LeadId" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center py-4 text-muted">
+                            <i class="bi bi-inbox fs-2 d-block mb-1"></i> No lead records found matching the criteria.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
+            <span class="small text-muted">Showing page @Model.PageNumber of @Model.TotalPages (Total @Model.TotalItems records)</span>
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber - 1)" asp-route-searchTerm="@Model.SearchTerm" asp-route-statusFilter="@Model.StatusFilter">Previous</a>
+                </li>
+                @for (int p = 1; p <= Model.TotalPages; p++)
+                {
+                    <li class="page-item @(p == Model.PageNumber ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-searchTerm="@Model.SearchTerm" asp-route-statusFilter="@Model.StatusFilter">@p</a>
+                    </li>
+                }
+                <li class="page-item @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageNumber + 1)" asp-route-searchTerm="@Model.SearchTerm" asp-route-statusFilter="@Model.StatusFilter">Next</a>
+                </li>
+            </ul>
+        </div>
+    }
+</div>

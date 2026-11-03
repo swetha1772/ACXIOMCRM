@@ -1,0 +1,114 @@
+@model LeadConvertViewModel
+@{
+    ViewData["Title"] = "Convert Lead";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 border-0">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-success text-white rounded p-2">
+                        <i class="bi bi-arrow-repeat fs-4"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0">Convert Lead to Customer</h4>
+                        <p class="text-muted small mb-0">Transform qualified lead into an active Customer Account and Sales Opportunity</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-4 pt-2">
+                <form asp-action="Convert" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="LeadId" />
+                    <input type="hidden" asp-for="LeadName" />
+                    <input type="hidden" asp-for="Email" />
+                    <input type="hidden" asp-for="Phone" />
+                    <input type="hidden" asp-for="CompanyName" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small"></div>
+
+                    <div class="p-3 bg-light rounded border mb-4">
+                        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-person-check me-1 text-success"></i> Customer Account To Be Created</h6>
+                        <div class="row small">
+                            <div class="col-sm-6 mb-1"><strong>Name:</strong> @Model.LeadName</div>
+                            <div class="col-sm-6 mb-1"><strong>Company:</strong> @(Model.CompanyName ?? "-")</div>
+                            <div class="col-sm-6"><strong>Email:</strong> @Model.Email</div>
+                            <div class="col-sm-6"><strong>Phone:</strong> @Model.Phone</div>
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch mb-3">
+                        <input asp-for="CreateOpportunity" class="form-check-input" id="createOppSwitch" />
+                        <label class="form-check-label fw-bold" for="createOppSwitch">
+                            Also create a new Sales Opportunity from this deal
+                        </label>
+                    </div>
+
+                    <div id="oppSection" class="border rounded p-3 mb-4 bg-white shadow-sm">
+                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-briefcase me-1"></i> New Opportunity Details</h6>
+
+                        <div class="mb-3">
+                            <label asp-for="OpportunityName" class="form-label small fw-semibold">Opportunity Name <span class="text-danger">*</span></label>
+                            <input asp-for="OpportunityName" class="form-control" />
+                            <span asp-validation-for="OpportunityName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Amount" class="form-label small fw-semibold">Deal Amount ($) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Amount" type="number" step="0.01" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Amount" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Probability" class="form-label small fw-semibold">Win Probability (%) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input asp-for="Probability" type="number" min="0" max="100" class="form-control" />
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                <span asp-validation-for="Probability" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ExpectedCloseDate" class="form-label small fw-semibold">Expected Close Date <span class="text-danger">*</span></label>
+                                <input asp-for="ExpectedCloseDate" type="date" class="form-control" />
+                                <span asp-validation-for="ExpectedCloseDate" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Stage" class="form-label small fw-semibold">Initial Pipeline Stage</label>
+                                <select asp-for="Stage" class="form-select">
+                                    <option value="Qualification">Qualification</option>
+                                    <option value="Proposal">Proposal</option>
+                                    <option value="Negotiation">Negotiation</option>
+                                </select>
+                                <span asp-validation-for="Stage" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Details" asp-route-id="@Model.LeadId" class="btn btn-light px-4">Cancel</a>
+                        <button type="submit" class="btn btn-success px-4 fw-semibold">
+                            <i class="bi bi-check2-circle me-1"></i> Convert Lead Now
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('createOppSwitch').addEventListener('change', function () {
+            document.getElementById('oppSection').style.display = this.checked ? 'block' : 'none';
+        });
+    </script>
+}
