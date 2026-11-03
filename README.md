@@ -1,12 +1,5 @@
 # AcxiomCRM - Enterprise Cloud CRM Solution
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Render-brightgreen?style=for-the-badge&logo=render)](https://acxiomcrm-saju.onrender.com)
-[![API Explorer](https://img.shields.io/badge/API-Interactive%20Docs-blue?style=for-the-badge&logo=swagger)](https://acxiomcrm-saju.onrender.com/api-docs)
-[![CI - Build and Test](https://github.com/swetha1772/AcxiomCRM/actions/workflows/ci.yml/badge.svg)](https://github.com/swetha1772/AcxiomCRM/actions)
-![.NET 8](https://img.shields.io/badge/.NET-8.0-blue.svg)
-![Architecture](https://img.shields.io/badge/Architecture-Clean%20Layered-emerald.svg)
-![Database](https://img.shields.io/badge/Database-SQLite%20%2F%20EF%20Core-blueviolet.svg)
-
 > 🌐 **Live Application:** [https://acxiomcrm-saju.onrender.com](https://acxiomcrm-saju.onrender.com)  
 > 📖 **Interactive REST API Explorer:** [https://acxiomcrm-saju.onrender.com/api-docs](https://acxiomcrm-saju.onrender.com/api-docs)  
 > 🔑 **Preconfigured Demo Accounts:**
