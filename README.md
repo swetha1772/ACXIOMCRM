@@ -1,10 +1,6 @@
 # AcxiomCRM - Enterprise Cloud CRM Solution
 
-[![CI - Build and Test AcxiomCRM](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPOSITORY/actions)
-![.NET 8](https://img.shields.io/badge/.NET-8.0-blue.svg)
-![Architecture](https://img.shields.io/badge/Architecture-Clean%20Layered-emerald.svg)
-![Database](https://img.shields.io/badge/Database-SQLite%20%2F%20EF%20Core-blueviolet.svg)
-![Bootstrap](https://img.shields.io/badge/Frontend-Bootstrap%205%20%2B%20Chart.js-purple.svg)
+
 
 A production-ready, clean, layered **ASP.NET Core 8 MVC** application built strictly according to the **AcxiomCRM Functional Specification**.
 
