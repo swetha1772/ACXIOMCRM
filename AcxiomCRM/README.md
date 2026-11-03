@@ -1,5 +1,11 @@
 # AcxiomCRM - Enterprise CRM Platform
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Render-brightgreen?style=for-the-badge&logo=render)](https://acxiomcrm-saju.onrender.com)
+[![API Explorer](https://img.shields.io/badge/API-Interactive%20Docs-blue?style=for-the-badge&logo=swagger)](https://acxiomcrm-saju.onrender.com/api-docs)
+
+> 🌐 **Live Application:** [https://acxiomcrm-saju.onrender.com](https://acxiomcrm-saju.onrender.com)  
+> 📖 **Interactive REST API Explorer:** [https://acxiomcrm-saju.onrender.com/api-docs](https://acxiomcrm-saju.onrender.com/api-docs)
+
 A production-ready, clean, layered **ASP.NET Core 8 MVC** application built according to the **AcxiomCRM CRM Project Documentation & Functional Specification**.
 
 ---

@@ -1,6 +1,18 @@
 # AcxiomCRM - Enterprise Cloud CRM Solution
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Render-brightgreen?style=for-the-badge&logo=render)](https://acxiomcrm-saju.onrender.com)
+[![API Explorer](https://img.shields.io/badge/API-Interactive%20Docs-blue?style=for-the-badge&logo=swagger)](https://acxiomcrm-saju.onrender.com/api-docs)
+[![CI - Build and Test](https://github.com/swetha1772/AcxiomCRM/actions/workflows/ci.yml/badge.svg)](https://github.com/swetha1772/AcxiomCRM/actions)
+![.NET 8](https://img.shields.io/badge/.NET-8.0-blue.svg)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20Layered-emerald.svg)
+![Database](https://img.shields.io/badge/Database-SQLite%20%2F%20EF%20Core-blueviolet.svg)
 
+> 🌐 **Live Application:** [https://acxiomcrm-saju.onrender.com](https://acxiomcrm-saju.onrender.com)  
+> 📖 **Interactive REST API Explorer:** [https://acxiomcrm-saju.onrender.com/api-docs](https://acxiomcrm-saju.onrender.com/api-docs)  
+> 🔑 **Preconfigured Demo Accounts:**
+> - **Administrator:** `admin@acxiom.com` / `Admin@123` (Full system, user management, audit logs)
+> - **Sales Manager:** `manager@acxiom.com` / `Manager@123` (Team pipeline, department reports)
+> - **Sales Executive:** `sales@acxiom.com` / `Sales@123` (Scoped to assigned accounts)
 
 A production-ready, clean, layered **ASP.NET Core 8 MVC** application built strictly according to the **AcxiomCRM Functional Specification**.
 
